@@ -8,8 +8,19 @@ dUtilities:
       - if <context.args.get[1]||null> == dUtilities:
         - narrate <script.yaml_key[version]>
         - determine fulfilled
-#    on reload scripts:
-#      - inject dUtilitiesInit
 
-#    on server start:
-#      - inject dUtilitiesInit
+    on reload scripts:
+      - inject dUtilitiesInit
+
+    on server start:
+      - inject dUtilitiesInit
+
+dUtilitiesInit:
+  type: task
+  debug: false
+  script:
+  - if <server.has_file[../dUtilities/config.yml]>:
+    - ~yaml load:../dUtilities/config.yml id:rdm_config
+    - announce to_console "[dUtilities] Loaded config.yml"
+  - else:
+    - announce to_console "[dUtilities] Unables to load plugins/dUtilities/config.yml"
