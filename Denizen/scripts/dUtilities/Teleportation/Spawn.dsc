@@ -19,7 +19,7 @@ setSpawn:
 
 spawn:
   type: command
-  debug: true
+  debug: false
   name: spawn
   description: Teleport to the world spawn.
   usage: /spawn
