@@ -1,11 +1,11 @@
-wild:
+randomTeleport:
   type: command
   debug: false
   name: wild
-  usage: /wild
+  usage: /randomtp
   aliases:
-  - randomtp
-  permission: wild.use
+  - wild
+  permission: randomtp.use
   script:
   # Let ops bypass the command-cooldown
   - if <player.has_flag[wildRecent]> && !<player.is_op>:
@@ -16,7 +16,7 @@ wild:
   - if <context.args.get[1]||null> == null:
     - define target:<player>
   - else:
-    - if <player.has_permission[wild.other]>:
+    - if <player.has_permission[randomtp.other]>:
       - if <server.match_player[<context.args.get[1]>]> != null:
         - narrate "Found player ..."
         - define target:<server.match_player[<context.args.get[1]>]>
@@ -28,9 +28,9 @@ wild:
 
   - if <player.has_permission[wild.use]>:
 
-    - define maxDistFromSpawn:<yaml[dUtilitiesConfig].read[max-teleport-distance]>
+    - define maxDistFromSpawn:<yaml[dUtilitiesConfig].read[randomtp.max-distance]>
 
-    - if <yaml[dUtilitiesConfig].read[wild-use-worldborder]>:
+    - if <yaml[dUtilitiesConfig].read[randomtp.use-worldborder]>:
       - define border:<player.location.world.border_size.div[2]>
       - if <[border]> > 10000:
         - define safeTeleportDistPositive:<[border].sub[1000]>
@@ -48,9 +48,9 @@ wild:
   - define randZCoords:<util.random.int[<[safeTeleportDistNegative]>].to[<[safeTeleportDistPositive]>]>
   - define randXCoords:<util.random.int[<[safeTeleportDistNegative]>].to[<[safeTeleportDistPositive]>]>
 
-  - if <yaml[dUtilitiesConfig].read[wild-use-effects]>:
+  - if <yaml[dUtilitiesConfig].read[use-effects]>:
     - playeffect sneeze <player.location.above.forward> quantity:500 offset:0.6
   - teleport <[target]> l@<[randXCoords]>,255,<[randZCoords]>,<[target].location.world>
-  - flag <[target]> freeFalling:true duration:<yaml[dUtilitiesConfig].read[wild-immunity-seconds]>
-  - if <yaml[dUtilitiesConfig].read[wild-command-cooldown]> > 0:
-    - flag <[target]> wildRecent:true duration:<yaml[dUtilitiesConfig].read[wild-command-cooldown]>
+  - flag <[target]> freeFalling:true duration:<yaml[dUtilitiesConfig].read[randomtp.immunity-seconds]>
+  - if <yaml[dUtilitiesConfig].read[randomtp.command-cooldown]> > 0:
+    - flag <[target]> wildRecent:true duration:<yaml[dUtilitiesConfig].read[randomtp.command-cooldown]>

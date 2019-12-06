@@ -2,24 +2,24 @@
 ##
 # Wild / RandomTP Config Section
 ##
+randomtp:
+    # If this is set to true, we look for the minecraft worldborder. 
+    # Set to true ONLY if you have a MINECRAFT worldborder set, not a plugin border.
+    # Keep in mind, the minecraft default world border is 29,999,999.
+    #
+    # If this is set to false, the max-teleport-distance is used as the border ( minus 10% )
+    use-worldborder: true
 
-# If this is set to true, we look for the minecraft worldborder. 
-# Set to true ONLY if you have a MINECRAFT worldborder set, not a plugin border.
-# Keep in mind, the minecraft default world border is 29,999,999.
-#
-# If this is set to false, the max-teleport-distance is used as the border ( minus 10% )
-wild-use-worldborder: true
+    # Max distance from spawn
+    # This is ignored if use-worldborder is true.
+    max-distance: 2500
 
-# Max distance from spawn
-# This is ignored if use-worldborder is true.
-wild-max-teleport-distance: 2500
+    # Use particle effects on-teleport.
+    # It works, but it's not fleshed out with any variability
+    use-effects: false
 
-# Use particle effects on-teleport.
-# It works, but it's not fleshed out with any variability
-wild-use-effects: false
+    # Seconds before someone can use /wild again
+    command-cooldown: 30
 
-# Seconds before someone can use /wild again
-wild-command-cooldown: 30
-
-# Seconds the player is immune from fall damage post-teleport.
-wild-immunity-seconds: 60
+    # Seconds the player is immune from fall damage post-teleport.
+    immunity-seconds: 60
