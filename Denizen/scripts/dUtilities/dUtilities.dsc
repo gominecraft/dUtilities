@@ -20,7 +20,7 @@ dUtilitiesInit:
   debug: false
   script:
   - if <server.has_file[../dUtilities/config.yml]>:
-    - ~yaml load:../dUtilities/config.yml id:rdm_config
-    - announce to_console "[dUtilities] Loaded config.yml"
+    - ~yaml load:../dUtilities/config.yml id:dUtilitiesConfig
+    - announce to_console "[dUtilities] Loaded config"
   - else:
     - announce to_console "[dUtilities] Unables to load plugins/dUtilities/config.yml"

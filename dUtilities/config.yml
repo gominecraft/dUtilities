@@ -1,9 +1,23 @@
 
+# Home config
+
+homes:
+    # What worlds allow sethome to be used
+    worlds:
+    - world
+    - my_other_world
+
+    # Set the amount of homes a player can have based on group
+    # If unspecified, default is 1.
+    groups:
+      MySpecialGroup: 2
+
+
 ##
 # Wild / RandomTP Config Section
 ##
 randomtp:
-    # If this is set to true, we look for the minecraft worldborder. 
+    # If use-worldborder is set to true, we look for the minecraft worldborder. 
     # Set to true ONLY if you have a MINECRAFT worldborder set, not a plugin border.
     # Keep in mind, the minecraft default world border is 29,999,999.
     #
@@ -22,4 +36,5 @@ randomtp:
     command-cooldown: 30
 
     # Seconds the player is immune from fall damage post-teleport.
+    # In general, >15 seconds is fine for falling from Y:255
     immunity-seconds: 60

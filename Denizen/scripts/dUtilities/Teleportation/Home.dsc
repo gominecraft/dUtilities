@@ -9,13 +9,14 @@ setHome:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
-  - if <player.has_permission[dutilities.sethome]> || <player.is_op>:
-    - note <player.location> as:<player.uuid>_<player.location.world.name>
-    - narrate "<gold>Your home has been set, <green><player.name><gold>!"
-    - announce to_console "[dUtilities] Home set by <player.name> @ <player.location.simple>"
+  - if <context.args.size> == 0:
+    - run setPlayerData homes.default|<player.location>
   - else:
-    - narrate "<red>Hey, <green><player.name><red>, you do not have permission to run that command!"
-    - stop
+    - define HomeName:<context.args.get[1]>
+    - run setPlayerData homes.<[HomeName]>|<player.location>
+    
+  - ~yaml savefile:../dUtilities/PlayerData
+    
 
 home:
   type: command
@@ -27,12 +28,4 @@ home:
   script:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
-    - stop
-  - if <player.has_permission[dutilities.home]>
-    - if <location[<player.uuid>_<player.location.world.name>]||false>:
-      - teleport <player> <location[<player.uuid>_<player.location.world.name>]>
-    - else:
-      - narrate "<red>You do not have a home set, <green><player.name><red>."
-  - else:
-    - narrate "<red>Hey, <green><player.name><red>, you do not have permission to run that command!"
     - stop
