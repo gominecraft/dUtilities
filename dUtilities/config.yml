@@ -10,7 +10,10 @@ homes:
     # Set the amount of homes a player can have based on group
     # If unspecified, default is 1.
     groups:
-      MySpecialGroup: 2
+      member: 2
+      staff: 5
+      admin: 10
+
 
 
 ##
@@ -27,10 +30,6 @@ randomtp:
     # Max distance from spawn
     # This is ignored if use-worldborder is true.
     max-distance: 2500
-
-    # Use particle effects on-teleport.
-    # It works, but it's not fleshed out with any variability
-    use-effects: false
 
     # Seconds before someone can use /wild again
     command-cooldown: 30

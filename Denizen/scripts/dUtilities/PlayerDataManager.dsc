@@ -21,14 +21,15 @@ getPlayerData:
       - ~yaml load:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>
       - define result <yaml[<player.uuid>].read[<[dataName]>]>
       - determine <result||null>
+      - yaml unload id:player.<player.uuid>
 
 playerDataEvents:
-  type: world 
+  type: world
   debug: false
   events:
     on player logs in:
       - if <server.has_file[../dUtilities/PlayerData/<player.uuid>.yml]>:
-        - ~yaml load:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>
+        - yaml load:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>
       - else:
         - yaml create id:player.<player.uuid>
         - ~yaml savefile:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>

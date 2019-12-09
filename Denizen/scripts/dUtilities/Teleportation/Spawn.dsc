@@ -9,13 +9,9 @@ setSpawn:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
-  - if <player.has_permission[dutilities.setspawn]> || <player.is_op>:
-    - note <player.location> as:spawn_<player.location.world.name>
-    - narrate "<gold>Spawn has been set for <green><player.location.world.name><gold> ..."
-    - announce to_console "[dUtilities] World spawn has been set by <player.name>."
-  - else:
-    - narrate "<red>Hey, <green><player.name><red>, you do not have permission to run that command!"
-    - stop
+  - note <player.location> as:spawn_<player.location.world.name>
+  - narrate "<gold>Spawn has been set for <green><player.location.world.name><gold> ..."
+  - announce to_console "[dUtilities] World spawn has been set by <player.name>."
 
 spawn:
   type: command
@@ -28,8 +24,5 @@ spawn:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
-  - if <player.has_permission[dutilities.spawn]> || <player.is_op>:
-    - teleport <player> <location[spawn_<player.world.name>]>
-  - else:
-    - narrate "<red>Hey, <player.name>, you do not have permission to run that command!"
-    - stop
+
+  - teleport <location[spawn_<player.world.name>]>

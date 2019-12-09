@@ -1,7 +1,7 @@
 randomTeleport:
   type: command
   debug: false
-  name: wild
+  name: randomtp
   usage: /randomtp
   aliases:
   - wild
@@ -16,41 +16,45 @@ randomTeleport:
   - if <context.args.get[1]||null> == null:
     - define target:<player>
   - else:
-    - if <player.has_permission[randomtp.other]>:
-      - if <server.match_player[<context.args.get[1]>]> != null:
-        - narrate "Found player ..."
-        - define target:<server.match_player[<context.args.get[1]>]>
-      - else:
-        - narrate "<context.args.get[1]> not found."
+    - if <server.match_player[<context.args.get[1]>]||null> != null:
+      - narrate "Found player ..."
+      - define target:<server.match_player[<context.args.get[1]>]>
     - else:
-      - narrate "You do not have permission to use wild on other players."
+      - narrate "<context.args.get[1]> not found."
       - stop
-
-  - if <player.has_permission[wild.use]>:
-
-    - define maxDistFromSpawn:<yaml[dUtilitiesConfig].read[randomtp.max-distance]>
-
-    - if <yaml[dUtilitiesConfig].read[randomtp.use-worldborder]>:
-      - define border:<player.location.world.border_size.div[2]>
-      - if <[border]> > 10000:
-        - define safeTeleportDistPositive:<[border].sub[1000]>
-        - define safeTeleportDistNegative:<[safeTeleportDistPositive].mul[-1]>
-      - else:
-        - define safeTeleportDistPositive:<[border].sub[<[border].mul[0.10]>]>
-        - define safeTeleportDistNegative:<[safeTeleportDistPositive].mul[-1]>
-    - else:
-      - define safeTeleportDistPositive:<[maxDistFromSpawn].sub[<[maxDistFromSpawn].as_element.mul[0.10]>]>
-      - define safeTeleportDistNegative:<[safeTeleportDistPositive].to_element.mul[-1]>
   - else:
-    - narrate "<red>You do not have permission to run that command."
-    - stop
+
+  - define maxDistFromSpawn:<yaml[dUtilitiesConfig].read[randomtp.max-distance]>
+
+  - if <yaml[dUtilitiesConfig].read[randomtp.use-worldborder]>:
+    - define border:<player.location.world.border_size.div[2]>
+    - if <[border]> > 10000:
+      - define safeTeleportDistPositive:<[border].sub[1000]>
+      - define safeTeleportDistNegative:<[safeTeleportDistPositive].mul[-1]>
+    - else:
+      - define safeTeleportDistPositive:<[border].sub[<[border].mul[0.10]>]>
+      - define safeTeleportDistNegative:<[safeTeleportDistPositive].mul[-1]>
+  - else:
+    - define safeTeleportDistPositive:<[maxDistFromSpawn].sub[<[maxDistFromSpawn].mul[0.10]>]>
+    - define safeTeleportDistNegative:<[safeTeleportDistPositive].mul[-1]>
 
   - define randZCoords:<util.random.int[<[safeTeleportDistNegative]>].to[<[safeTeleportDistPositive]>]>
   - define randXCoords:<util.random.int[<[safeTeleportDistNegative]>].to[<[safeTeleportDistPositive]>]>
 
-  - if <yaml[dUtilitiesConfig].read[use-effects]>:
-    - playeffect sneeze <player.location.above.forward> quantity:500 offset:0.6
   - teleport <[target]> l@<[randXCoords]>,255,<[randZCoords]>,<[target].location.world>
   - flag <[target]> freeFalling:true duration:<yaml[dUtilitiesConfig].read[randomtp.immunity-seconds]>
   - if <yaml[dUtilitiesConfig].read[randomtp.command-cooldown]> > 0:
     - flag <[target]> wildRecent:true duration:<yaml[dUtilitiesConfig].read[randomtp.command-cooldown]>
+
+RandomTPEvents:
+  type: world
+  debug: false
+  events:
+    on player damaged by FALL bukkit_priority:LOWEST:
+      - if <player.has_flag[freeFalling]>:
+        - flag <player> freeFalling:!
+        - determine cancelled
+
+    on entity starts gliding:
+      - if <player.has_flag[freeFalling]>:
+        - flag <player> freeFalling:!

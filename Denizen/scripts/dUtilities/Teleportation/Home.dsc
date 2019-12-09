@@ -3,46 +3,88 @@ setHome:
   debug: false
   name: sethome
   description: Set a player home.
-  usage: /sethome
+  usage: /sethome (name)
   permission: dutilities.sethome
   script:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
+  - if !<yaml[dUtilitiesConfig].read[homes.worlds].contains[<player.location.world.name>]>:
+    - narrate "<gold>You may not set a home in this world."
   - if <context.args.is_empty>:
-    - run setPlayerData homes.default|<player.location>
-    - if <proc[getPlayerData].context[DefaultHome]||null> == null:
-      - run setPlayerData DefaultHome|default
+    - run setPlayerData def:homes.default|<player.location>
+    - if <yaml[player.<player.uuid>].read[DefaultHome]||null> == null:
+      - run setPlayerData def:DefaultHome|default
+      - narrate "<green>Default home set."
   - else:
-    - define HomeName:<context.args.get[1]>
-    - run setPlayerData homes.<[HomeName]>|<player.location>
+    # No, you may not name yor home default.
+    - if <context.args.get[1]||null> == default:
+      - narrate "<gold>You cannot set <blue>default<gold> as a home name."
+      - stop
+    # Only look at the first group. The logic to bounce through all the groups is above me.
+    - if <yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||null> == null:
+      - narrate "<gold>The group you are a member of (<blue><player.groups.get[1]><gold>) cannot set a named home."
+      - stop
+    - else:
+      - define maxHomes:<yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||1>
+      - define playerHomeCount:<yaml[player.<player.uuid>].list_keys[homes].size>
+      - if <[playerHomesCount]> >= <[maxHomes]>:
+        - narrate "<gold>You have reached the maximum number of homes allotted."
+        - stop
+      - else:
+        - run setPlayerData def:homes.<context.args.get[1]>|<player.location>
+        - narrate "<gold>The group you are a member of (<blue><player.groups.get[1]><gold>) cannot set a named home."
+        - stop
 
-setDefaultHome:
+delHome:
   type: command
   debug: false
   name: setdefaulthome
-  description: Set a player home.
+  description: Let the player set their default home.
   usage: /setdefaulthome [name]
   Aliases:
   - sdhome
   permission: dutilities.sethome
   tab completion:
   - if <context.args.is_empty>:
-    - determine <yaml[player.<player.uuid>].list_keys[homes]>
-  - if <context.args.get> == 1 && !<context.raw_args.ends_with[&sp]>:
-    - determine <yaml[player.<player.uuid>].read[homes].filter[starts_with[<context.args.get[1]>]]>
+    - determine <yaml[player.<player.uuid>].list_keys[homes]||null>
+  - if <context.args.size> == 1 && !<context.raw_args.ends_with[&sp]>:
+    - determine <yaml[player.<player.uuid>].read[homes].filter[starts_with[<context.args.get[1]>]]||null>
+  script:
+  - if <yaml[player.<player.uuid>].read[homes.<context.args.get[1]>]||null> == null:
+    - narrate "<gold>No home found by that name."
+    - stop
+  - else:
+    - yaml id:player.<player.uuid> set homes.<context.args.get[1]>:!
+
+setDefaultHome:
+  type: command
+  debug: false
+  name: setdefaulthome
+  description: Let the player set their default home.
+  usage: /setdefaulthome [name]
+  Aliases:
+  - sdhome
+  permission: dutilities.sethome
+  tab completion:
+  - if <context.args.is_empty>:
+    - determine <yaml[player.<player.uuid>].list_keys[homes]||null>
+  - if <context.args.size> == 1 && !<context.raw_args.ends_with[&sp]>:
+    - determine <yaml[player.<player.uuid>].read[homes].filter[starts_with[<context.args.get[1]>]]||null>
   script:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
   - if <context.args.is_empty>:
     - narrate "<gold>You must specify an existing home name."
+    - stop
   - else:
-    - if <proc[getPlayerData].context[homes.<context.args.get[1]>]>:
-      - run setPlayerData DefaultHome|<context.args.get[1]>
-      - narrate "<gold>Default home set to <green><context.args.get[1]><gold>."
+    - if <yaml[player.<player.uuid>].read[homes.<context.args.get[1]>]||null> ==null null:
+      - narrate "<gold>Home '<blue><context.args.get[1]><gold>' not found."
+      - stop
     - else:
-      - narrate "<gold>Home name not found: <red><context.args.get[1]><gold>."
+      - run setPlayerData def:DefaultHome|<context.args.get[1]>
+      - narrate "<gold>Default home set to '<green><context.args.get[1]><gold>'."
 
 home:
   type: command
@@ -53,9 +95,9 @@ home:
   permission: dutilities.home
   tab completion:
   - if <context.args.is_empty>:
-    - determine <yaml[player.<player.uuid>].list_keys[homes]>
-  - if <context.args.get> == 1 && !<context.raw_args.ends_with[&sp]>:
-    - determine <yaml[player.<player.uuid>].read[homes].filter[starts_with[<context.args.get[1]>]]>
+    - determine <yaml[player.<player.uuid>].list_keys[homes]||null>
+  - if <context.args.size> == 1 && !<context.raw_args.ends_with[&sp]>:
+    - determine <yaml[player.<player.uuid>].read[homes].filter[starts_with[<context.args.get[1]>]]||null>
   script:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
@@ -65,18 +107,19 @@ home:
     - if <yaml[player.<player.uuid>].read[DefaultHome]||null> == null:
       # No default home? Lets see if they have a "default" home.
       - if <yaml[player.<player.uuid>].read[homes.default]||null> == null:
-        - narrate "<red>You do not have a home set. Use <blue>/sethome<red> to set your default home location."
+        - narrate "<>You do not have a home set. Use <blue>/sethome<gold> to set your default home location."
+        - stop
       - else:
-        - teleport <player> <yaml[player.<player.uuid>].read[homes.default]>
+        - teleport <yaml[player.<player.uuid>].read[homes.default]>
         # Fix the missing DefaultHome value.
-        - run setPlayerData DefaultHome|default
+        - run setPlayerData def:DefaultHome|default
     - else:
       - define defaultHome:<yaml[player.<player.uuid>].read[DefaultHome]>
-      - teleport <player> <yaml[player.<player.uuid>].read[homes.<[defaultHome]>]>
+      - teleport <yaml[player.<player.uuid>].read[homes.<[defaultHome]>]>
   - else:
     - define <[argHome]>:<context.args.get[1]>
     - if <yaml[player.<player.uuid>].read[homes.<[argHome]>]||null> == null:
-      - narrate "<red>Specified home (<blue><[argHome]><red>) not found."
+      - narrate "<gold>Specified home (<blue><[argHome]><gold>) not found."
     - else:
       - define argHome:<context.args.get[1]>
-      - teleport <player> <yaml[player.<player.uuid>].read[homes.<[argHome]>]>
+      - teleport <yaml[player.<player.uuid>].read[homes.<[argHome]>]>
