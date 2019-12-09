@@ -22,18 +22,18 @@ getPlayerData:
       - define result <yaml[<player.uuid>].read[<[dataName]>]>
       - determine <result||null>
 
-playerData_events:
+playerDataEvents:
   type: world 
   debug: false
   events:
-    on player logs in priority:-2000:
+    on player logs in:
       - if <server.has_file[../dUtilities/PlayerData/<player.uuid>.yml]>:
         - ~yaml load:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>
       - else:
         - yaml create id:player.<player.uuid>
         - ~yaml savefile:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>
 
-    on player quit priority:2000:
+    on player quit priority:
       - if <yaml.list.contains[player.<player.uuid>]>:
         - ~yaml savefile:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>
         - yaml unload id:player.<player.uuid>
