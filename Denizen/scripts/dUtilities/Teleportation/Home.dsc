@@ -17,10 +17,14 @@ setHome:
       - run setPlayerData def:DefaultHome|default
       - narrate "<green>Default home set."
   - else:
-    # No, you may not name yor home default.
+    - if !<context.args.get[1].matches[[A-Za-z0-9]+]>:
+      - narrate "<gold>You may only use <blue>A-Z, a-z, 0-9 <gold>and <blue>_<gold> in home names."
+      - stop
+    # No, you may not name your home default.
     - if <context.args.get[1]||null> == default:
       - narrate "<gold>You cannot set <blue>default<gold> as a home name."
       - stop
+    - if <context.args.get[1]>
     # Only look at the first group. The logic to bounce through all the groups is above me.
     - if <yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||null> == null:
       - narrate "<gold>The group you are a member of (<blue><player.groups.get[1]><gold>) cannot set a named home."
