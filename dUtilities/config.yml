@@ -1,5 +1,4 @@
-
-# Home config
+# home / sethome config
 
 homes:
     # What worlds allow sethome to be used
@@ -9,12 +8,11 @@ homes:
 
     # Set the amount of homes a player can have based on group
     # If unspecified, default is 1.
+    # Anyone that is opped automatically gets 500 homes.
     groups:
-      member: 2
-      staff: 5
-      admin: 10
-
-
+        member: 2
+        staff: 5
+        admin: 10
 
 ##
 # Wild / RandomTP Config Section

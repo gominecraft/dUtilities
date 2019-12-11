@@ -2,14 +2,14 @@ setHome:
   type: command
   debug: false
   name: sethome
-  description: Set a player home.
+  description: Allows a player to set a (named) home.
   usage: /sethome (name)
   permission: dutilities.sethome
   script:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
-  - if !<yaml[dUtilitiesConfig].read[homes.worlds].contains[<player.location.world.name>]>:
+  - if !<yaml[dUtilitiesConfig].read[homes.worlds].contains[<player.location.world.name>]> && !<player.is_op>:
     - narrate "<gold>You may not set a home in this world."
   - if <context.args.is_empty>:
     - run setPlayerData def:homes.default|<player.location>
@@ -24,14 +24,17 @@ setHome:
     - if <context.args.get[1]||null> == default:
       - narrate "<gold>You cannot set <blue>default<gold> as a home name."
       - stop
-    - if <context.args.get[1]>
     # Only look at the first group. The logic to bounce through all the groups is above me.
-    - if <yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||null> == null:
+    - if <yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||null> == null && !<player.is_op>:
       - narrate "<gold>The group you are a member of (<blue><player.groups.get[1]><gold>) cannot set a named home."
       - stop
     - else:
-      - define maxHomes:<yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||1>
+      - if <player.is_op>:
+        - define maxHomes:500
+      - else:
+        - define maxHomes:<yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||1>
       - define playerHomeCount:<yaml[player.<player.uuid>].list_keys[homes].size>
+      - if <player.is_op>:
       - if <[playerHomesCount]> >= <[maxHomes]>:
         - narrate "<gold>You have reached the maximum number of homes allotted."
         - stop
@@ -43,12 +46,12 @@ setHome:
 delHome:
   type: command
   debug: false
-  name: setdefaulthome
-  description: Let the player set their default home.
-  usage: /setdefaulthome [name]
+  name: delhome
+  description: Let the player delete a home they own.
+  usage: /delhome [name]
   Aliases:
   - sdhome
-  permission: dutilities.sethome
+  permission: dutilities.delhome
   tab completion:
   - if <context.args.is_empty>:
     - determine <yaml[player.<player.uuid>].list_keys[homes]||null>
@@ -94,7 +97,7 @@ home:
   type: command
   debug: false
   name: home
-  description: Sends a player to their home, if they have one.
+  description: Sends a player to their chosen home, if they have one.
   usage: /home
   permission: dutilities.home
   tab completion:

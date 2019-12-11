@@ -10,7 +10,7 @@ setSpawn:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
   - note <player.location> as:spawn_<player.location.world.name>
-  - narrate "<gold>Spawn has been set for <green><player.location.world.name><gold> ..."
+  - narrate "<gold>Spawn has been set for '<green><player.location.world.name><gold>'."
   - announce to_console "[dUtilities] World spawn has been set by <player.name>."
 
 spawn:
