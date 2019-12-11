@@ -18,11 +18,11 @@ clear:
     - if <player.has_permission[dutilities.clear.other]>:
       # Match online player
       - if <server.match_player[<context.args.get[1]>]>:
-        - inventory clear d:<p@[<[target]>].inventory>
+        - inventory clear d:<[target].inventory>
         - narrate "<gold>You have cleared <green><[target]><gold>'s inventory.'"
         # Do some logging.
         - if <context.server>
-          - "Console user cleared <[target]>'s inventory."
+          - narrate "Console user cleared <[target]>'s inventory."
         - else:
           - announce to_console "<player.name> cleared <[target]>'s inventory."
       - else:

@@ -8,8 +8,8 @@ randomTeleport:
   permission: randomtp.use
   script:
   # Let ops bypass the command-cooldown
-  - if <player.has_flag[wildRecent]> && !<player.is_op>:
-    - narrate "<red>You must wait <player.flag[wildRecent].expiration.formatted> before you can use this command again."
+  - if <player.has_flag[rtpRecent]> && !<player.is_op>:
+    - narrate "<red>You must wait <player.flag[rtpRecent].expiration.formatted> before you can use this command again."
     - stop
 
   # Run /wild or /randomtp [player]
@@ -41,10 +41,10 @@ randomTeleport:
   - define randZCoords:<util.random.int[<[safeTeleportDistNegative]>].to[<[safeTeleportDistPositive]>]>
   - define randXCoords:<util.random.int[<[safeTeleportDistNegative]>].to[<[safeTeleportDistPositive]>]>
 
-  - teleport <[target]> l@<[randXCoords]>,255,<[randZCoords]>,<[target].location.world>
+  - teleport <[target]> <[randXCoords]>,255,<[randZCoords]>,<[target].location.world>
   - flag <[target]> freeFalling:true duration:<yaml[dUtilitiesConfig].read[randomtp.immunity-seconds]>
   - if <yaml[dUtilitiesConfig].read[randomtp.command-cooldown]> > 0:
-    - flag <[target]> wildRecent:true duration:<yaml[dUtilitiesConfig].read[randomtp.command-cooldown]>
+    - flag <[target]> rtpRecent:true duration:<yaml[dUtilitiesConfig].read[randomtp.command-cooldown]>
 
 RandomTPEvents:
   type: world

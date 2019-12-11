@@ -11,11 +11,13 @@ setHome:
     - stop
   - if !<yaml[dUtilitiesConfig].read[homes.worlds].contains[<player.location.world.name>]> && !<player.is_op>:
     - narrate "<gold>You may not set a home in this world."
+    - stop
   - if <context.args.is_empty>:
     - run setPlayerData def:homes.default|<player.location>
     - if <yaml[player.<player.uuid>].read[DefaultHome]||null> == null:
       - run setPlayerData def:DefaultHome|default
       - narrate "<green>Default home set."
+      - stop
   - else:
     - if !<context.args.get[1].matches[[A-Za-z0-9]+]>:
       - narrate "<gold>You may only use <blue>A-Z, a-z, 0-9 <gold>and <blue>_<gold> in home names."
@@ -29,14 +31,14 @@ setHome:
       - narrate "<gold>The group you are a member of (<blue><player.groups.get[1]><gold>) cannot set a named home."
       - stop
     - else:
+      # Player is an Op? Give them 500 homes.
       - if <player.is_op>:
         - define maxHomes:500
       - else:
         - define maxHomes:<yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||1>
       - define playerHomeCount:<yaml[player.<player.uuid>].list_keys[homes].size>
-      - if <player.is_op>:
       - if <[playerHomesCount]> >= <[maxHomes]>:
-        - narrate "<gold>You have reached the maximum number of homes allotted."
+        - narrate "<gold>You have <blue><[playerHomesCount]> <gold>/ <blue><[maxHomes]><gold>. You cannot create another until you delete one."
         - stop
       - else:
         - run setPlayerData def:homes.<context.args.get[1]>|<player.location>
