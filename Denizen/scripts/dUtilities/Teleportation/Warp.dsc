@@ -20,8 +20,6 @@ delWarp:
   name: delwarp
   description: Delete a warp.
   usage: /delwarp [name]
-  Aliases:
-  - sdwarp
   permission: dutilities.delwarp
   tab complete:
   - if <context.args.is_empty>:

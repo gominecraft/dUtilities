@@ -51,8 +51,6 @@ delHome:
   name: delhome
   description: Let the player delete a home they own.
   usage: /delhome [name]
-  Aliases:
-  - sdhome
   permission: dutilities.delhome
   tab complete:
   - if <context.args.is_empty>:
