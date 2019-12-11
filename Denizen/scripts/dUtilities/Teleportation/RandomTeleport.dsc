@@ -1,6 +1,6 @@
 randomTeleport:
   type: command
-  debug: false
+  debug: true
   name: randomtp
   usage: /randomtp
   aliases:
@@ -48,7 +48,7 @@ randomTeleport:
 
 RandomTPEvents:
   type: world
-  debug: false
+  debug: true
   events:
     on player damaged by FALL bukkit_priority:LOWEST:
       - if <player.has_flag[freeFalling]>:

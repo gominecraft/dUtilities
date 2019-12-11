@@ -1,6 +1,6 @@
 setHome:
   type: command
-  debug: false
+  debug: true
   name: sethome
   description: Allows a player to set a (named) home.
   usage: /sethome (name)
@@ -37,24 +37,24 @@ setHome:
       - else:
         - define maxHomes:<yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||1>
       - define playerHomeCount:<yaml[player.<player.uuid>].list_keys[homes].size>
-      - if <[playerHomesCount]> >= <[maxHomes]>:
-        - narrate "<gold>You have <blue><[playerHomesCount]> <gold>/ <blue><[maxHomes]><gold>. You cannot create another until you delete one."
+      - if <[playerHomeCount]> >= <[maxHomes]>:
+        - narrate "<gold>You have <blue><[playerHomeCount]> <gold>/ <blue><[maxHomes]><gold>. You cannot create another until you delete one."
         - stop
       - else:
         - run setPlayerData def:homes.<context.args.get[1]>|<player.location>
-        - narrate "<gold>The group you are a member of (<blue><player.groups.get[1]><gold>) cannot set a named home."
+        - narrate "<gold>Your named home (<blue><context.args.get[1]><gold>) has been set!"
         - stop
 
 delHome:
   type: command
-  debug: false
+  debug: true
   name: delhome
   description: Let the player delete a home they own.
   usage: /delhome [name]
   Aliases:
   - sdhome
   permission: dutilities.delhome
-  tab completion:
+  tab complete:
   - if <context.args.is_empty>:
     - determine <yaml[player.<player.uuid>].list_keys[homes]||null>
   - if <context.args.size> == 1 && !<context.raw_args.ends_with[&sp]>:
@@ -65,17 +65,18 @@ delHome:
     - stop
   - else:
     - yaml id:player.<player.uuid> set homes.<context.args.get[1]>:!
+    - narrate "<gold>Your home (<blue><context.args.get[1]><gold>) has been removed."
 
 setDefaultHome:
   type: command
-  debug: false
+  debug: true
   name: setdefaulthome
   description: Let the player set their default home.
   usage: /setdefaulthome [name]
   Aliases:
   - sdhome
   permission: dutilities.sethome
-  tab completion:
+  tab complete:
   - if <context.args.is_empty>:
     - determine <yaml[player.<player.uuid>].list_keys[homes]||null>
   - if <context.args.size> == 1 && !<context.raw_args.ends_with[&sp]>:
@@ -97,12 +98,12 @@ setDefaultHome:
 
 home:
   type: command
-  debug: false
+  debug: true
   name: home
   description: Sends a player to their chosen home, if they have one.
   usage: /home
   permission: dutilities.home
-  tab completion:
+  tab complete:
   - if <context.args.is_empty>:
     - determine <yaml[player.<player.uuid>].list_keys[homes]||null>
   - if <context.args.size> == 1 && !<context.raw_args.ends_with[&sp]>:
@@ -112,7 +113,7 @@ home:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
   # Empty args? Default home.
-  - if <context.args.is_empty>
+  - if <context.args.is_empty>:
     - if <yaml[player.<player.uuid>].read[DefaultHome]||null> == null:
       # No default home? Lets see if they have a "default" home.
       - if <yaml[player.<player.uuid>].read[homes.default]||null> == null:
@@ -126,9 +127,9 @@ home:
       - define defaultHome:<yaml[player.<player.uuid>].read[DefaultHome]>
       - teleport <yaml[player.<player.uuid>].read[homes.<[defaultHome]>]>
   - else:
-    - define <[argHome]>:<context.args.get[1]>
-    - if <yaml[player.<player.uuid>].read[homes.<[argHome]>]||null> == null:
-      - narrate "<gold>Specified home (<blue><[argHome]><gold>) not found."
+    - define homeName:<context.args.get[1]>
+    - if <yaml[player.<player.uuid>].read[homes.<[homeName]>]||null> == null:
+      - narrate "<gold>Specified home (<blue><[homeName]><gold>) not found."
     - else:
-      - define argHome:<context.args.get[1]>
-      - teleport <yaml[player.<player.uuid>].read[homes.<[argHome]>]>
+      - define homeName:<context.args.get[1]>
+      - teleport <yaml[player.<player.uuid>].read[homes.<[homeName]>]>

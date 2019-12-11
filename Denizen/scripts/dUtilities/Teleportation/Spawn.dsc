@@ -1,6 +1,6 @@
 setSpawn:
   type: command
-  debug: false
+  debug: true
   name: setspawn
   description: Set the world spawn to your location.
   usage: /setspawn
@@ -15,7 +15,7 @@ setSpawn:
 
 spawn:
   type: command
-  debug: false
+  debug: true
   name: spawn
   description: Teleport to the world spawn.
   usage: /spawn
@@ -24,5 +24,4 @@ spawn:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
-
   - teleport <location[spawn_<player.world.name>]>

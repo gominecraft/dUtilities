@@ -17,7 +17,7 @@ dUtilities:
 
 dUtilitiesInit:
   type: task
-  debug: false
+  debug: true
   script:
   - if <server.has_file[../dUtilities/config.yml]>:
     - ~yaml load:../dUtilities/config.yml id:dUtilitiesConfig

@@ -1,6 +1,6 @@
 setPlayerData:
   type: task
-  debug: false
+  debug: true
   definitions: dataName|dataValue
   script:
     - if <player.is_online>:
@@ -12,7 +12,7 @@ setPlayerData:
 
 getPlayerData:
   type: procedure
-  debug: false
+  debug: true
   definitions: dataName
   script:
     - if <player.is_online>:
@@ -25,7 +25,7 @@ getPlayerData:
 
 playerDataEvents:
   type: world
-  debug: false
+  debug: true
   events:
     on player logs in:
       - if <server.has_file[../dUtilities/PlayerData/<player.uuid>.yml]>:
