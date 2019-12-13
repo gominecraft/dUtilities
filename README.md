@@ -1,4 +1,4 @@
-# RandomDeathMessages
+# dUtilities
 
 Denizen script to replace death messages with random, saltier messages.
 
