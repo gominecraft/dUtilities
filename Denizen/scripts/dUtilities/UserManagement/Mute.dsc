@@ -1,9 +1,17 @@
+muteChatEvents:
+  type: world
+  debug: false
+  events:
+    on player chats flagged:muted:
+      - narrate "<red>You have been muted."
+      - determine cancelled
+
 mute:
   type: command
   debug: false
-  name:
+  name: mute
   description: Mute a player. Seee documentation for timeformat (Temporary mute)
-  usage: /ban [player] (timeFormat)
+  usage: /mute [player] (timeFormat)
   permission: dutilities.mute
   tab complete:
   - if <player.has_permission[dutilities.mute]>:
@@ -12,14 +20,25 @@ mute:
     - else if <context.args.size> == 1 && <context.raw_args.ends_with[<&sp>].not>:
       - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[1]>]]>
   script:
-  -if <context.args.get[1] >
-  - flag <server.list_online_players[]>
+  - if <context.args.get[1]||null] != null>:
+    - if <server.match_offline_player[<context.args.get[1]>]||false>
+      - if <context.args.get[2].matches[([0-9]{1,3}(|m|h|d))]>:
+        - define duration:<context.args.get[2]>
+      - else:
+        - narrate "<red>Time format not recognized or empty."
+        - run showUsage
+      - flag <server.match_offline_player[<context.args.get[1]>]> muted:1 duration:<[duration]>
+      - narrate "<blue><context.args.get[1]><blue> has been muted for <red><[duration]>."
+    - else:
+      - narrate "<red>No player found by that name."
+  - else:
+    - run showUsage
 
-
-muteChatEvents:
-  type: world
+showUsage:
+  type: task
   debug: false
-  events:
-    on player chats flagged:muted:
-      - narrate "<red>You have been muted. "
-      - determine cancelled
+  script:
+  - narrate "<gold>Usage: <blue>/mute <red>[player] <green>[time]"
+  - narrate "  <gold>Example: <blue>/mute <red><player.name> <green>5m"
+  - narrate "  <gold>Time Formats: #m, #h, #d"
+  - narrate "  <gold>Max value: <red>999"
