@@ -39,4 +39,5 @@ dUtilitiesInit:
     - ~yaml load:../dUtilities/config.yml id:dUtilitiesConfig
     - announce to_console "[dUtilities] Loaded config"
   - else:
-    - announce to_console "[dUtilities] Unables to load plugins/dUtilities/config.yml"
+    - announce to_console "[dUtilities] Failed to load config.yml!"
+    - stop

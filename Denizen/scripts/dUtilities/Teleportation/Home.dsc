@@ -24,7 +24,7 @@ setHome:
       - stop
     # No, you may not name your home default.
     - if <context.args.get[1]||null> == default:
-      - narrate "<gold>You cannot set <blue>default<gold> as a home name."
+      - narrate "<gold>You cannot set <blue>default <gold>as a home name."
       - stop
     # Only look at the first group. The logic to bounce through all the groups is above me.
     - if <yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||null> == null && !<player.is_op>:
@@ -38,11 +38,15 @@ setHome:
         - define maxHomes:<yaml[dUtilitiesConfig].read[homes.groups.<player.groups.get[1]>]||1>
       - define playerHomeCount:<yaml[player.<player.uuid>].list_keys[homes].size>
       - if <[playerHomeCount]> >= <[maxHomes]>:
-        - narrate "<gold>You have <blue><[playerHomeCount]> <gold>/ <blue><[maxHomes]><gold>. You cannot create another until you delete one."
+        - narrate "<gold>You have <blue><[playerHomeCount]><gold> / <blue><[maxHomes]><gold>. You cannot create another until you have less than the max."
         - stop
       - else:
         - run setPlayerData def:homes.<context.args.get[1]>|<player.location>
         - narrate "<gold>Your named home (<blue><context.args.get[1]><gold>) has been set!"
+        # In case the player has no default home, we set it here as well.
+        - if <yaml[player.<player.uuid>].read[DefaultHome]||null> == null:
+          - run setPlayerData def:DefaultHome|<context.args.get[1]>
+          - narrate "<gold>Additionally, this has been set as your default home."
         - stop
 
 delHome:
@@ -113,7 +117,7 @@ home:
   # Empty args? Default home.
   - if <context.args.is_empty>:
     - if <yaml[player.<player.uuid>].read[DefaultHome]||null> == null:
-      # No default home? Lets see if they have a "default" home.
+      # No DefaultHome? Lets see if they have a "default" home.
       - if <yaml[player.<player.uuid>].read[homes.default]||null> == null:
         - narrate "<>You do not have a home set. Use <blue>/sethome<gold> to set your default home location."
         - stop
