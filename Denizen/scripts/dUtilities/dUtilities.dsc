@@ -3,7 +3,7 @@
 # |
 # | dUtilities
 # |
-# | A light weight *actual* essentials script, minus the junk
+# | A light weight *actual* essential toolset, minus the junk
 # |
 # +----------------------
 #
