@@ -1,6 +1,8 @@
 give:
   type: command
   debug: false
+  name: give
+  description: Give a player an item.
   usage: /give [player] [item] (amount)
   aliases:
   permission: dutilities.give
@@ -34,6 +36,8 @@ give:
 i:
   type: command
   debug: false
+  name: i
+  description: Give yourself an item.
   usage: /i [item] (amount)
   permission: dutilities.give
   tab complete:
