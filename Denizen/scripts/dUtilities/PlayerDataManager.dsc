@@ -34,7 +34,7 @@ playerDataEvents:
         - yaml create id:player.<player.uuid>
         - ~yaml savefile:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>
 
-    on player quit priority:
+    on player quit priority:LOWEST:
       - if <yaml.list.contains[player.<player.uuid>]>:
         - ~yaml savefile:../dUtilities/PlayerData/<player.uuid>.yml id:player.<player.uuid>
         - yaml unload id:player.<player.uuid>

@@ -1,6 +1,6 @@
 # dUtilities
 
-Denizen script to replace death messages with random, saltier messages.
+Denizen script to give some baseline necessary features.
 
 ----
 
