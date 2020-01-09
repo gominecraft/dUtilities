@@ -1,6 +1,6 @@
 freeze:
   type: command
-  debug: true
+  debug: false
   name: freeze
   description: Allows an admin to freeze a player in place.
   usage: /freeze (player)
@@ -23,7 +23,7 @@ freeze:
 
 unfreeze:
   type: command
-  debug: true
+  debug: false
   name: unfreeze
   description: Allows an admin to unfreeze a player.
   usage: /unfreeze (player)

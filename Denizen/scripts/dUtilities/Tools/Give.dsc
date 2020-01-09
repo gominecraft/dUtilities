@@ -36,7 +36,7 @@ give:
 
 i:
   type: command
-  debug: true
+  debug: false
   name: i
   description: Give yourself an item.
   usage: /i [item] (amount)
