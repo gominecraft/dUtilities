@@ -88,8 +88,8 @@ gamemode_handle_command:
         - else if <[target].is_online>:
           - adjust <[target]> gamemode:<gamemode]>
           - narrate "<&e>You have been to set to <&6><[gamemode].to_titlecase> Mode<&e> by <&b><player.name||Console>" targets:<[target]>
-          - narrate "<&e>Your have set <&b><[target].name><&e> to <&6><[gamemode].to_titlecase> Mode<&e>."
+          - narrate "<&e>You have set <&b><[target].name><&e> to <&6><[gamemode].to_titlecase> Mode<&e>."
         - else:
           - adjust <[target]> gamemode:<gamemode]>
-          - narrate "<&e>Your have set <&b><[target].name><&6>(<&7>OFFLINE<&6>)<&e> to <&6><[gamemode].to_titlecase> Mode<&e>."
+          - narrate "<&e>You have set <&b><[target].name><&6>(<&7>OFFLINE<&6>)<&e> to <&6><[gamemode].to_titlecase> Mode<&e>."
         - define completed:|:<[target]>
