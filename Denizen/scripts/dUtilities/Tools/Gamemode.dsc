@@ -9,7 +9,6 @@ gamemode_creative:
   tab complete:
     - inject gamemode_tab_complete
   script:
-    - define gamemode:<script.yaml_key[gamemode]>
     - inject gamemode_handle_command
 
 gamemode_adventure:
@@ -23,7 +22,6 @@ gamemode_adventure:
   tab complete:
     - inject gamemode_tab_complete
   script:
-    - define gamemode:<script.yaml_key[gamemode]>
     - inject gamemode_handle_command
 
 gamemode_survival:
@@ -37,7 +35,6 @@ gamemode_survival:
   tab complete:
     - inject gamemode_tab_complete
   script:
-    - define gamemode:<script.yaml_key[gamemode]>
     - inject gamemode_handle_command
 
 gamemode_spectator:
@@ -51,7 +48,6 @@ gamemode_spectator:
   tab complete:
     - inject gamemode_tab_complete
   script:
-    - define gamemode:<script.yaml_key[gamemode]>
     - inject gamemode_handle_command
 
 gamemode_tab_complete:
@@ -76,6 +72,7 @@ gamemode_handle_command:
       - stop
     - else:
       - define target_list:<context.args>
+    - define gamemode:<queue.script.yaml_key[gamemode]>
     - foreach <[target_list]> as:target:
       - if !<[target].is_player>:
         - define target:<server.match_player[<[target]>]||null>
