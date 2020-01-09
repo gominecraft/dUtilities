@@ -15,7 +15,7 @@ freeze:
       - flag player block_movement:true
       - narrate "<&e>Good Job! You <&b>froze<&e> yourself."
     - else:
-      - define target <serer.match_online_player[<context.args.get[1]>]||null>
+      - define target <server.match_online_player[<context.args.get[1]>]||null>
       - if <[target]> != null:
         - flag <[target]> block_movement:true
         - narrate "<&c>You have been <&b>frozen <&c> by <&a><player.name>" targets:<[target]>
@@ -43,7 +43,7 @@ unfreeze:
       - flag player block_movement:!
       - narrate "<&c>You are now unfrozen."
     - else:
-      - define target <serer.match_online_player[<context.args.get[1]>]||null>
+      - define target <server.match_online_player[<context.args.get[1]>]||null>
       - if <[target]> != null:
         - if <[target].has_flag[block_movement]>:
           - narrate "<&c><[target].name> is not frozen."
