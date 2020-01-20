@@ -4,11 +4,11 @@ homes:
     # What worlds allow sethome to be used
     worlds:
     - world
-    - my_other_world
+    - my_example_world
 
     # Set the amount of homes a player can have based on group
     # If unspecified, default is 1.
-    # Anyone that is opped automatically gets 500 homes.
+    # Anyone that is opped automatically gets 50 homes.
     groups:
         member: 2
         staff: 5
@@ -24,6 +24,12 @@ randomtp:
     #
     # If this is set to false, the max-teleport-distance is used as the border ( minus 10% )
     use-worldborder: true
+
+    # Biomes you don't want people to spawn in.
+    # This is a wildcard match, so "ocean" matches
+    # all of the *ocean* biomes.
+    blacklist-biomes:
+    - ocean
 
     # Max distance from spawn
     # This is ignored if use-worldborder is true.
