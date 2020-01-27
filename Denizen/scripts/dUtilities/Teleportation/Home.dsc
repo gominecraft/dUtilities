@@ -13,9 +13,9 @@ setHome:
     - narrate "<gold>You may not set a home in this world."
     - stop
   - if <context.args.is_empty>:
-    - run setPlayerData def:homes.default|<player.location>
+    - run dUtilitiesSetPlayerData def:homes.default|<player.location>
     - if <yaml[dutilities.player.<player.uuid>].read[DefaultHome]||null> == null:
-      - run setPlayerData def:DefaultHome|default
+      - run dUtilitiesSetPlayerData def:DefaultHome|default
       - narrate "<green>Default home set."
       - stop
   - else:
@@ -41,11 +41,11 @@ setHome:
         - narrate "<gold>You have <blue><[playerHomeCount]><gold> / <blue><[maxHomes]><gold>. You cannot create another until you have less than the max."
         - stop
       - else:
-        - run setPlayerData def:homes.<context.args.get[1]>|<player.location>
+        - run dUtilitiesSetPlayerData def:homes.<context.args.get[1]>|<player.location>
         - narrate "<gold>Your named home (<blue><context.args.get[1]><gold>) has been set!"
         # In case the player has no default home, we set it here as well.
         - if <yaml[dutilities.player.<player.uuid>].read[DefaultHome]||null> == null:
-          - run setPlayerData def:DefaultHome|<context.args.get[1]>
+          - run dUtilitiesSetPlayerData def:DefaultHome|<context.args.get[1]>
           - narrate "<gold>Additionally, this has been set as your default home."
         - stop
 
@@ -95,7 +95,7 @@ setDefaultHome:
       - narrate "<gold>Home '<blue><context.args.get[1]><gold>' not found."
       - stop
     - else:
-      - run setPlayerData def:DefaultHome|<context.args.get[1]>
+      - run dUtilitiesSetPlayerData def:DefaultHome|<context.args.get[1]>
       - narrate "<gold>Default home set to '<green><context.args.get[1]><gold>'."
 
 home:
@@ -124,7 +124,7 @@ home:
       - else:
         - teleport <yaml[dutilities.player.<player.uuid>].read[homes.default]>
         # Fix the missing DefaultHome value.
-        - run setPlayerData def:DefaultHome|default
+        - run dUtilitiesSetPlayerData def:DefaultHome|default
     - else:
       - define defaultHome:<yaml[dutilities.player.<player.uuid>].read[DefaultHome]>
       - teleport <yaml[dutilities.player.<player.uuid>].read[homes.<[defaultHome]>]>

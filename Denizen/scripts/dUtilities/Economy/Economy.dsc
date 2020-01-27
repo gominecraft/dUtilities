@@ -5,10 +5,12 @@ dEconomy:
   name plural: Dollars
   digits: 2
   format: $<amount>
-  balance: <yaml[dutilities.<player.uuid>].read[balance]>
+  balance: <yaml[dutilities.p.<player.uuid>].read[balance]>
   has: <proc[dEconomyPlayerBalance]>
   withdraw:
+  # do some shit
   deposit:
+  # Do some other shit
 
 
 dEconomyBalanceCommand:
@@ -29,10 +31,20 @@ dEconomyBalanceCommand:
   - if <context.args.get[1]||null> == null:
     - narrate "<gold>You have <green><amount> <gold>in your account."
 
-
+dEconomyPayCommand:
+  type: command
+  name: pay
+  description: Pay another player a given amount.
+  usage: /pay [playerName]
+  permission: deconomy.use
+  tab complete:
+  - if <context.args.size> == 1 && context.raw_args.endS_with[<&sp>].not:
+    - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[1]>]]>
+  script:
+  
 
 dEconomyPlayerBalance:
   type: procedure
   definitions: balance
   script:
-  - determine <yaml[dutilities.p.<player.uuid>].read[balance]
+  - determine <yaml[dutilities.p.<player.uuid>].read[balance]>
