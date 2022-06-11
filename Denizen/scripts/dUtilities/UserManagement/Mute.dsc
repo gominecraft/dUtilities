@@ -32,9 +32,9 @@ mute:
     - else:
       - narrate "<red>No player found by that name."
   - else:
-    - run showUsage
+    - run showMuteUsage
 
-showUsage:
+showMuteUsage:
   type: task
   debug: false
   script:
