@@ -22,7 +22,7 @@ dUtilities:
   events:
     on version command:
       - if <context.args.get[1]||null> == dUtilities:
-        - narrate <script.yaml_key[version]>
+        - narrate <script.data_key[version]>
         - determine fulfilled
 
     on reload scripts:
@@ -65,7 +65,7 @@ dUtilitiesPlayerDataEvents:
       - yaml create id:dutilities.p.<player.uuid>
       - ~yaml savefile:../dUtilities/PlayerData/<player.uuid>.yml id:dutilities.p.<player.uuid>
 
-    on player quit priority:LOWEST:
+    on player quit priority:10:
     - if <yaml.list.contains[dutilities.p.<player.uuid>]>:
       - ~yaml savefile:../dUtilities/PlayerData/<player.uuid>.yml id:dutilities.p.<player.uuid>
       - yaml unload id:dutilities.p.<player.uuid>

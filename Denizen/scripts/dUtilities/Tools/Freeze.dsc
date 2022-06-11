@@ -7,15 +7,15 @@ freeze:
   permission: dutilities.freeze
   tab complete:
     - if <context.args.is_empty||true>:
-      - determine <server.list_online_players.parse[name]>
+      - determine <server.online_players.parse[name]>
     - else if <context.args.size> == 1 && <context.raw_args.ends_with[<&sp>].not>:
-      - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[1]>]]>
+      - determine <server.online_players.parse[name].filter[starts_with[<context.args.get[1]>]]>
   script:
     - if <context.arg.is_empty||true>:
       - flag player block_movement:true
       - narrate "<&e>Good Job! You <&b>froze<&e> yourself."
     - else:
-      - define target <server.match_online_player[<context.args.get[1]>]||null>
+      - define target <server.match_player[<context.args.get[1]>]||null>
       - if <[target]> != null:
         - flag <[target]> block_movement:true
         - narrate "<&c>You have been <&b>frozen <&c> by <&a><player.name>" targets:<[target]>
@@ -30,9 +30,9 @@ unfreeze:
   permission: dutilities.unfreeze
   tab complete:
     - if <context.args.is_empty||true>:
-      - determine <server.list_online_players.parse[name]>
+      - determine <server.online_players.parse[name]>
     - else if <context.args.size> == 1 && <context.raw_args.ends_with[<&sp>].not>:
-      - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[1]>]]>
+      - determine <server.online_players.parse[name].filter[starts_with[<context.args.get[1]>]]>
     - else:
       - determine <list[]>
   script:
@@ -43,7 +43,7 @@ unfreeze:
       - flag player block_movement:!
       - narrate "<&c>You are now unfrozen."
     - else:
-      - define target <server.match_online_player[<context.args.get[1]>]||null>
+      - define target <server.match_player[<context.args.get[1]>]||null>
       - if <[target]> != null:
         - if <[target].has_flag[block_movement]>:
           - narrate "<&c><[target].name> is not frozen."
@@ -59,6 +59,6 @@ frozen_handler:
   events:
     on player walks flagged:block_movement:
       - determine cancelled
-    
+
     on player jumps flagged:block_movement:
       - determine cancelled

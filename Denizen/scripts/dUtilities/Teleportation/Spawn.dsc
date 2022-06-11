@@ -1,4 +1,4 @@
-setSpawn:
+setSpawnCommand:
   type: command
   debug: true
   name: setspawn
@@ -13,7 +13,7 @@ setSpawn:
   - narrate "<gold>Spawn has been set for '<green><player.location.world.name><gold>'."
   - announce to_console "[dUtilities] World spawn has been set by <player.name>."
 
-spawn:
+spawnCommand:
   type: command
   debug: true
   name: spawn

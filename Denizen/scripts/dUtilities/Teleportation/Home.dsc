@@ -19,7 +19,7 @@ setHome:
       - narrate "<green>Default home set."
       - stop
   - else:
-    - if !<context.args.get[1].matches[[A-Za-z0-9]+]>:
+    - if !<context.args.get[1].regex_matches[[A-Za-z0-9]+]>:
       - narrate "<gold>You may only use <blue>A-Z, a-z, 0-9 <gold>and <blue>_<gold> in home names."
       - stop
     # No, you may not name your home default.
@@ -119,7 +119,7 @@ home:
     - if <yaml[dutilities.player.<player.uuid>].read[DefaultHome]||null> == null:
       # No DefaultHome? Lets see if they have a "default" home.
       - if <yaml[dutilities.player.<player.uuid>].read[homes.default]||null> == null:
-        - narrate "<>You do not have a home set. Use <blue>/sethome<gold> to set your default home location."
+        - narrate "<gold>You do not have a home set. Use <blue>/sethome<gold> to set your default home location."
         - stop
       - else:
         - teleport <yaml[dutilities.player.<player.uuid>].read[homes.default]>

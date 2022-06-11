@@ -57,9 +57,9 @@ gamemode_tab_complete:
     - if !<player.has_permission[dutilities.gamemode.other]>:
       - determine <list[]>
     - else if <context.args.is_empty||true> || <context.raw_args.ends_with[<&sp>]>:
-      - determine <server.list_online_players.parse[name]>
+      - determine <server.online_players.parse[name]>
     - else if <context.args.size> >= 1 && <context.raw_args.ends_with[<&sp>].not>:
-      - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[<context.args.size>]>]]>
+      - determine <server.online_players.parse[name].filter[starts_with[<context.args.get[<context.args.size>]>]]>
 
 gamemode_handle_command:
   type: task
@@ -72,7 +72,7 @@ gamemode_handle_command:
       - stop
     - else:
       - define target_list:<context.args>
-    - define gamemode:<queue.script.yaml_key[gamemode]>
+    - define gamemode:<queue.script.data_key[gamemode]>
     - foreach <[target_list]> as:target:
       - if !<[target].is_player>:
         - define target:<server.match_player[<[target]>]||null>
@@ -83,10 +83,10 @@ gamemode_handle_command:
           - adjust <player> gamemode:<[gamemode]>
           - narrate "<&e>You have set yourself to <&6><[gamemode].to_titlecase> Mode<&e>."
         - else if <[target].is_online>:
-          - adjust <[target]> gamemode:<gamemode]>
+          - adjust <[target]> gamemode:<[gamemode]>
           - narrate "<&e>You have been to set to <&6><[gamemode].to_titlecase> Mode<&e> by <&b><player.name||Console>" targets:<[target]>
           - narrate "<&e>You have set <&b><[target].name><&e> to <&6><[gamemode].to_titlecase> Mode<&e>."
         - else:
-          - adjust <[target]> gamemode:<gamemode]>
+          - adjust <[target]> gamemode:<[gamemode]>
           - narrate "<&e>You have set <&b><[target].name><&6>(<&7>OFFLINE<&6>)<&e> to <&6><[gamemode].to_titlecase> Mode<&e>."
         - define completed:|:<[target]>

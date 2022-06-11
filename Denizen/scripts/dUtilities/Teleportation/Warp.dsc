@@ -9,7 +9,7 @@ setWarp:
   - if <context.server>:
     - announce to_console "[dUtilities] This command must be issued in-game."
     - stop
-  - if !<context.args.get[1].matches[[A-Za-z0-9]+]>:
+  - if !<context.args.get[1].regex_matches[[A-Za-z0-9]+]>:
     - narrate "<gold>You may only use <blue>A-Z, a-z, 0-9 <gold>and <blue>_<gold> in warp names."
     - stop
   - note <player.location> as:warp_<context.args.get[1]>
@@ -27,7 +27,7 @@ delWarp:
   - if <context.args.size> == 1 && !<context.raw_args.ends_with[&sp]>:
     - determine <server.list_notables[location].filter[starts_with[warp_<context.args.get[1]>]].after[_]>
   script:
-  - if <context.args.get[1].matches[[A-Za-z0-9]+]> && <server.list_notables[location].filter[starts_with[warp_]]>:
+  - if <context.args.get[1].regex_matches[[A-Za-z0-9]+]> && <server.list_notables[location].filter[starts_with[warp_]]>:
     - note remove as:warp_<context.args.get[1]>
     - narrate "<gold>Removed warp '<blue><context.args.get[1]><gold>'."
   - else:

@@ -16,13 +16,13 @@ mute:
   tab complete:
   - if <player.has_permission[dutilities.mute]>:
     - if <context.arguments.size||0> == 0:
-      - determine <server.list_online_players.parse[name]>
+      - determine <server.online_players.parse[name]>
     - else if <context.args.size> == 1 && <context.raw_args.ends_with[<&sp>].not>:
-      - determine <server.list_online_players.parse[name].filter[starts_with[<context.args.get[1]>]]>
+      - determine <server.online_players.parse[name].filter[starts_with[<context.args.get[1]>]]>
   script:
-  - if <context.args.get[1]||null] != null>:
-    - if <server.match_offline_player[<context.args.get[1]>]||false>
-      - if <context.args.get[2].matches[([0-9]{1,3}(|m|h|d))]>:
+  - if <context.args.get[1]||null> != null:
+    - if <server.match_offline_player[<context.args.get[1]>]||false>:
+      - if <context.args.get[2].regex_matches[([0-9]{1,3}(|m|h|d))]>:
         - define duration:<context.args.get[2]>
       - else:
         - narrate "<red>Time format not recognized or empty."
